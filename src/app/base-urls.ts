@@ -1,7 +1,7 @@
 export class BaseUrls {
 
-  public static readonly BASE_HREF: string = "http://localhost:8080";
-
+ // public static readonly BASE_HREF: string = "http://localhost:8080";
+public static readonly BASE_HREF: string = "http://ec2-52-90-77-245.compute-1.amazonaws.com/:8080";
   public static readonly ADMIN_GROUPURL: string = "adminauth";
   public static readonly CARS_GROUPURL: string = "cars";
   public static readonly CART_GROUPURL: string = "cart";
