@@ -1,0 +1,28 @@
+<div class="container-fluid mt-3">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <span style="font-size: 2em;">Subscription Plans</span>
+        <div class="row w-100 mt-2">
+            <div class="col-lg-4 col-md-4 col-12" *ngFor="let plan of subscriptionList">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col d-flex flex-column justify-content-center aling-items-center">
+                            <span class="font-weight-bold h2 text-center"> {{ plan.title }} </span>
+                            <div class="d-flex justify-content-center align-items-center h6 mt-3">
+                                <span class="text-muted">Validity: </span>
+                                <span class="ml-2 font-weight-bold">{{ plan.expiry }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <button class="btn w-100" (click)="purchaseSubscription(plan)" [ngClass]="{
+                            'btn-outline-success': userModel.subscriptionName !== plan.title,
+                            'btn-success': userModel.subscriptionName === plan.title
+                        }">
+                            {{ userModel.subscriptionName === plan.title ? "Already Purchased" : "Purchase" }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

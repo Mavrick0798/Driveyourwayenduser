@@ -1,0 +1,145 @@
+<div class="row w-100 m-0 mt-3">
+  <div class="col-12">
+    <h5 class="text-muted">Filter Cars by Categories</h5>
+  </div>
+  <div class="col-12 col-sm-6 col-md-4">
+    <div class="d-flex" style="gap: 10px;">
+      <button type="button" class="btn btn-outline-dark px-4 rounded-pill"
+        [routerLink]="['./', category.categoryId, 'cars']" *ngFor="let category of categories; index as idx">
+        {{ category['categoryName'] }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="row w-100 m-0 mt-3">
+  <div class="col-12">
+    <h4>Cars</h4>
+  </div>
+  <div class="col-12 col-sm-6 col-md-4 mb-4" *ngFor="let car of cars; index as idx">
+    <div class="card rounded-lg">
+      <img [src]="car['images'][car['thumbnailImage']]" alt="" class="card-img-top">
+      <div class="card-body">
+        <h4 class="card-title m-0 mb-1 d-flex justify-content-between align-items-center">
+          <span>{{ car['name'] }}</span>
+          <span style="font-size: 20px;">{{ car['price'] | currency: 'INR':'symbol' }}</span>
+        </h4>
+        <p class="card-text m-0">{{ car['description'] }}</p>
+      </div>
+      <div class="card-footer border-0 bg-white">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="d-flex flex-column">
+              <span class="h6 m-0">Location: {{ car['location'] }}</span>
+              <span class="text-sm text-muted text-wrap">Rating: {{ car['rating'] }}</span>
+            </div>
+          </div>
+          <div class="col-12 mt-2">
+            <div class="d-flex flex-column flex-sm-row justify-content-end" style="gap: 8px;">
+              <button type="button" class="btn btn-outline-success btn-sm rounded-lg" (click)="openViewCarDetailsModal(viewCarDetailsModalRef, car)">View Details</button>
+              <button type="button" class="btn btn-outline-success btn-sm rounded-lg" (click)="addToWishlist(car.carId)">Add to Wishlist</button>
+              <button type="button" class="btn btn-success btn-sm rounded-lg" (click)="openInterestModal(interestModalRef, car)">Purchase Interest</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #interestModalRef let-modal>
+  <div class="modal-header">
+    <span class="modal-title font-weight-bold">Car Details</span>
+    <button type="button" class="btn" aria-label="Close" id="closeAddNewStaffModal" #closeAddNewStaffModal
+      (click)="modal.dismiss('Cross click')">
+      &cross;
+    </button>
+  </div>
+  <form [formGroup]="interestFormGroup" (ngSubmit)="saveInterest()" ngNativeValidate>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex flex-column">
+            <span class="h5 m-0">{{ selectedCarModel['name'] }}</span>
+            <span>
+              Actual Price: {{ selectedCarModel['price'] }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="mb-2">
+            <label for="proposedPrice" class="form-label text-muted m-0 mb-1">Propose Price</label>
+            <input type="number" class="form-control" id="proposedPrice" name="proposedPrice"
+              formControlName="proposedPrice">
+          </div>
+          <div class="mb-2">
+            <label for="message" class="form-label text-muted m-0 mb-1">Message</label>
+            <textarea rows="3" class="form-control" id="message" name="message" formControlName="message"></textarea>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary btn-sm" (click)="modal.dismiss('')">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-success btn-sm" [disabled]="loader">
+        Save
+        <span *ngIf="loader">&nbsp;</span>
+        <div *ngIf="loader" class="spinner-border spinner-border-sm text-white" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #viewCarDetailsModalRef let-modal>
+  <div class="modal-header border-0">
+    <span class="modal-title font-weight-bold">Car Details</span>
+    <button type="button" class="btn" aria-label="Close" id="closeAddNewStaffModal" #closeAddNewStaffModal
+      (click)="modal.dismiss('Cross click')">
+      &cross;
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title m-0 mb-1 d-flex justify-content-between align-items-center">
+          <span>{{ selectedCarModel['name'] }}</span>
+          <span style="font-size: 20px;">{{ selectedCarModel['price'] | currency: 'INR':'symbol' }}</span>
+        </h4>
+        <p class="card-text m-0">{{ selectedCarModel['description'] }}</p>
+      </div>
+      <div class="card-footer border-0 bg-white">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="d-flex flex-column">
+              <span class="h6 m-0">Location: {{ selectedCarModel['location'] }}</span>
+              <span class="text-sm text-muted text-wrap">Rating: {{ selectedCarModel['rating'] }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-2" *ngIf="showCarUserInfoBool">
+      <div class="card-body d-flex flex-column">
+        <span class="text-muted mb-2">User Information</span>
+        <h3 class="card-title m-0 mb-1">{{ userInfo['fullName'] | titlecase }}</h3>
+        <span class="text-muted">Email: {{ userInfo['email'] }}</span>
+        <span class="text-muted">Contact: {{ userInfo['contact'] || "Not Provided" }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer border-0">
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="modal.dismiss('')">Close</button>
+    <button type="button" class="btn btn-outline-success btn-sm rounded-lg"
+      (click)="addToWishlist(selectedCarModel.carId)">Add to Wishlist</button>
+    <button type="button" class="btn btn-success btn-sm rounded-lg"
+      (click)="openInterestModal(interestModalRef, selectedCarModel)">Purchase Interest</button>
+  </div>
+</ng-template>

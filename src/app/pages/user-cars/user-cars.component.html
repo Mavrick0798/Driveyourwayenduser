@@ -1,0 +1,140 @@
+<div class="container-fluid mt-4">
+  <div class="row w-100 m-0">
+    <div class="col">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white border-0">
+          <div class="row">
+            <div class="col-6">
+              <span style="font-size: 1.2em;" class="font-weight-bold">Cars</span>
+            </div>
+            <div class="col-6">
+              <button class="btn btn-success float-right" (click)="openCarModal(carModal)">Add Car</button>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-flush m-0">
+            <thead>
+              <tr>
+                <th scope="col" style="font-weight: 450;">Sr. No</th>
+                <th scope="col" style="font-weight: 450;">Name</th>
+                <th scope="col" style="font-weight: 450;">Description</th>
+                <th scope="col" style="font-weight: 450;">Price</th>
+                <th scope="col" style="font-weight: 450;">Added On</th>
+                <th scope="col" style="font-weight: 450;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let car of cars; index as idx">
+                <td class="text-sm">{{ idx + 1 }}</td>
+                <td class="text-sm">{{ car["name"] }}</td>
+                <td class="text-sm">{{ car["description"] }}</td>
+                <td class="text-sm">{{ car["price"] }}</td>
+                <td class="text-sm">{{ car["addedOn"] | date:'short' }}</td>
+                <td class="text-sm">
+                  <button type="button" class="btn btn-sm btn-outline-success mx-1" (click)="openCarModal(carModal, car)">Edit</button>
+                  <!-- <button type="button" class="btn btn-sm btn-outline-success mx-1">Details</button> -->
+                  <button type="button" class="btn btn-sm btn-outline-success mx-1" (click)="openDeleteModal(deleteModal, car)" >Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #carModal let-modal>
+  <div class="modal-header">
+    <span class="modal-title font-weight-bold">Car Details</span>
+    <button type="button" class="btn" aria-label="Close" id="closeAddNewStaffModal" #closeAddNewStaffModal
+      (click)="modal.dismiss('Cross click')">
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
+  <form [formGroup]="carForm" (ngSubmit)="saveCar()" ngNativeValidate>
+    <div class="modal-body">
+      <div class="row w-100 m-0">
+        <div class="col-12">
+          <div class="mb-2">
+            <label for="name" class="form-label text-muted m-0 mb-1">Name</label>
+            <input type="text" class="form-control" id="name" name="name" formControlName="name"
+              placeholder="eg: ABS Car">
+          </div>
+          <div class="mb-2">
+            <label for="description" class="form-label text-muted m-0 mb-1">Description</label>
+            <textarea type="text" rows="3" class="form-control" id="description" name="description"
+              formControlName="description" placeholder="eg: ABS Car"></textarea>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="mb-2">
+                <label for="price" class="form-label text-muted m-0 mb-1">Category</label>
+                <select class="custom-select" name="" id="" formControlName="categoryId">
+                  <option value="" selected>Select Category</option>
+                  <option *ngFor="let category of categories" [value]="category.categoryId">{{ category.categoryName }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="mb-2">
+                <label for="price" class="form-label text-muted m-0 mb-1">Price</label>
+                <input type="number" class="form-control" id="price" name="price" formControlName="price"
+                  placeholder="Price">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mb-2">
+                <label for="rating" class="form-label text-muted m-0 mb-1">Rating</label>
+                <input type="number" class="form-control" id="rating" name="rating" formControlName="rating"
+                  placeholder="1 to 5">
+              </div>
+            </div>
+
+          </div>
+          <div class="mb-2">
+            <label for="offers" class="form-label text-muted m-0 mb-1">Offers</label>
+            <input type="text" class="form-control" id="offers" name="offers" formControlName="offers"
+              placeholder="Offers">
+          </div>
+          <div class="mb-2">
+            <label for="location" class="form-label text-muted m-0 mb-1">Location</label>
+            <input type="text" class="form-control" id="location" name="location" formControlName="location"
+              placeholder="eg: Delhi">
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success btn-sm" [disabled]="loader">
+        Save
+        <span *ngIf="loader">&nbsp;</span>
+        <div *ngIf="loader" class="spinner-border spinner-border-sm text-white" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </button>
+      <button type="button" class="btn btn-secondary btn-sm" (click)="modal.dismiss('')">
+        Cancel
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+
+<ng-template #deleteModal let-modal>
+    <div class="modal-header">
+      <span class="modal-title font-weight-bold">Are you sure to delete this item?</span>
+      <button type="button" class="btn" aria-label="Close" id="closeAddNewStaffModal" #closeAddNewStaffModal
+        (click)="modal.dismiss('Cross click')">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-outline-success" (click)="deleteItem(selectedCarModel.carId)">Yes</button>
+        <button class="btn btn-sm btn-success">Cancel</button>
+    </div>
+</ng-template>

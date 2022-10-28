@@ -1,0 +1,45 @@
+<div class="row w-100 m-0 mt-4" *ngIf="wishlists.length === 0">
+  <div class="col" >
+    <div class="card ">
+      <div class="card-body">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+          <img src="./../../../assets/empty.svg" alt="" class="img-fluid" width="256px" height="256px">
+          <h5 class="card-title mt-2">
+            No Wishlist
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row w-100 m-0 mt-4" *ngIf="wishlists.length !== 0">
+  <div class="col-12 col-sm-6 col-md-4 mb-4" *ngFor="let car of wishlists; index as idx">
+    <div class="card rounded-lg">
+      <img [src]="car['images'][car['thumbnailImage']]" alt="" class="card-img-top">
+      <div class="card-body">
+        <h4 class="card-title m-0 mb-1 d-flex justify-content-between align-items-center">
+          <span>{{ car['name'] }}</span>
+          <span style="font-size: 20px;">{{ car['price'] | currency: 'INR':'symbol' }}</span>
+        </h4>
+        <p class="card-text m-0">{{ car['description'] }}</p>
+      </div>
+      <div class="card-footer border-0 bg-white">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="d-flex flex-column">
+              <span class="h6 m-0">Location: {{ car['location'] }}</span>
+              <span class="text-sm text-muted text-wrap">Rating: {{ car['rating'] }}</span>
+            </div>
+          </div>
+          <div class="col-12 mt-2">
+            <div class="d-flex flex-column flex-sm-row justify-content-end" style="gap: 8px;">
+              <button type="button" class="btn btn-outline-danger btn-sm rounded-lg" (click)="deleteItem(car.wishListId)">
+                Remove from Wishlist
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
